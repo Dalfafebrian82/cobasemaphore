@@ -1,6 +1,6 @@
 ---
 - name: Setup Multi Web Server
-  hosts: webservers
+  hosts: web_servers
   become: yes
   roles:
     - webserver
