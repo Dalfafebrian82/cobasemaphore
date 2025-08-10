@@ -4,18 +4,3 @@
   become: yes
   roles:
     - webserver
-
-- name: Disable CD-ROM repository in sources.list
-  ansible.builtin.replace:
-    path: /etc/apt/sources.list
-    regexp: '^deb cdrom:.*'
-    replace: '# \g<0>'
-
-- name: Update apt cache
-  ansible.builtin.apt:
-    update_cache: yes
-
-- name: Install Apache Web Server
-  ansible.builtin.apt:
-    name: apache2
-    state: present
