@@ -1,0 +1,17 @@
+---
+- name: Setup Web Server
+  hosts: web_servers
+  gather_facts: yes
+
+  tasks:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Start Apache
+      service:
+        name: apache2
+        state: started
+        enabled: yes
