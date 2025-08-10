@@ -1,0 +1,35 @@
+---
+- name: Disable CD-ROM repo and install Apache2 on Debian Bookworm
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Comment out any CD-ROM repo entries
+      replace:
+        path: /etc/apt/sources.list
+        regexp: '^(deb cdrom:.*)'
+        replace: '# \1'
+
+    - name: Ensure Debian Bookworm repositories are present
+      blockinfile:
+        path: /etc/apt/sources.list
+        block: |
+          deb http://deb.debian.org/debian bookworm main
+          deb http://security.debian.org/debian-security bookworm-security main
+          deb http://deb.debian.org/debian bookworm-updates main
+        marker: "# {mark} ANSIBLE MANAGED DEBIAN BOOKWORM REPOS"
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Apache2
+      apt:
+        name: apache2
+        state: present
+
+    - name: Ensure Apache2 is running and enabled
+      service:
+        name: apache2
+        state: started
+        enabled: yes
